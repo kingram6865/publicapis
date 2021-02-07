@@ -34,10 +34,12 @@ function listApis() {
   const categories = `${base}/categories`
   // const all = `${base}/entries?category=`
   // const test ="https://api.publicapis.org/entries?category=Transportation"
-  const loadingMsg = "Loading Categories"
+  // const loadingMsg = "Loading Categories"
+  const loaderMsg = '<div class="loader">Loadinng APIs</div>'
   const loader = document.createElement('div')
   loader.className = "loading"
-  loader.innerText = loadingMsg
+  // loader.innerText = loadingMsg
+  loader.innerHTML = loaderMsg
   formHome.appendChild(loader)
   fetch(proxy + categories)
     .then(response => response.json())
@@ -57,7 +59,6 @@ function listCategory(info) {
   // const proxy="https://cors-anywhere.herokuapp.com/"
   const base='https://api.publicapis.org'  
   const category = encodeURI(`${base}/entries?category=${info}`)
-
   // console.log(category)
   fetch(proxy + category)
     .then(response => response.json())
@@ -82,7 +83,7 @@ function listCategory(info) {
         span1.className = 'api'
         span2.innerHTML = (x.Auth) ? `Need <span class="authvalue">${x.Auth}</span> to access` : ''
         span2.className = 'auth'
-        span3.innerHTML = (x.Cors) ? ((x.Cors === 'unknown') ? `Cors use ${x.Cors}` : '') : ''
+        span3.innerHTML = (x.Cors) ? ((x.Cors === 'unknown') ? `Cors use ${x.Cors}` : 'Uses Cors') : ''
         span3.className = 'cors'
         // span4.innerHTML = `HTTPS: ${x.HTTPS}`
         span4.innerHTML = (x.HTTPS) ? ` HTTPS ` : ''
@@ -103,7 +104,6 @@ function listCategory(info) {
         // dest.appendChild(paragraph3)
         dest.appendChild(separator)
         document.querySelector('.results').appendChild(dest)
-
       })
     })
 }
