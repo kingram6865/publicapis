@@ -35,7 +35,7 @@ function listApis() {
   // const all = `${base}/entries?category=`
   // const test ="https://api.publicapis.org/entries?category=Transportation"
   // const loadingMsg = "Loading Categories"
-  const loaderMsg = '<div class="loader">Loadinng APIs</div>'
+  const loaderMsg = '<div class="loader">Loading APIs</div>'
   const loader = document.createElement('div')
   loader.className = "loading"
   // loader.innerText = loadingMsg
@@ -59,12 +59,37 @@ function listCategory(info) {
   // const proxy="https://cors-anywhere.herokuapp.com/"
   const base='https://api.publicapis.org'  
   const category = encodeURI(`${base}/entries?category=${info}`)
+  const xhr = new XMLHttpRequest()
+
   // console.log(category)
   fetch(proxy + category)
     .then(response => response.json())
     .then((data) => {
       console.log(data)
       data.entries.forEach((x) => {
+        xhr.open('GET', proxy + x.Link)
+        xhr.onreadystatechange = () => {
+          if ((xhr.readyState === 4) && (xhr.status === 200)){
+            const headers = xhr.getAllResponseHeaders()
+            const arr = headers.trim().split(/[\r\n]+/)
+            const headerMap = {}
+            arr.forEach( line => {
+              const parts = line.split(': ')
+              const header = parts.shift()
+              const value = parts.join(': ')
+              headerMap[header] = value
+            })
+            console.log(headerMap)
+            if ((headerMap['x-frame-options']) && ((headerMap['x-frame-options'] === 'DENY') || (headerMap['x-frame-options'] === 'SAMEORIGIN'))) {
+              // console.log(headerMap['x-frame-options'])
+              console.log(headerMap)
+              location.target = '_blank'   
+            } else {
+              location.target = 'apiView'   
+            }
+          }
+        }
+        xhr.send()
         const dest = document.createElement('div')
         const span1 = document.createElement('span')
         const span2 = document.createElement('span')
