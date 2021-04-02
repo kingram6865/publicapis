@@ -65,8 +65,9 @@ function listCategory(info) {
   fetch(proxy + category)
     .then(response => response.json())
     .then((data) => {
-      console.log(data)
+      // console.log(data)
       data.entries.forEach((x) => {
+        // console.log(x.Link)
         xhr.open('GET', proxy + x.Link)
         xhr.onreadystatechange = () => {
           if ((xhr.readyState === 4) && (xhr.status === 200)){
@@ -79,6 +80,8 @@ function listCategory(info) {
               const value = parts.join(': ')
               headerMap[header] = value
             })
+            console.log(x.Link)
+
             console.log(headerMap)
             if ((headerMap['x-frame-options']) && ((headerMap['x-frame-options'] === 'DENY') || (headerMap['x-frame-options'] === 'SAMEORIGIN'))) {
               // console.log(headerMap['x-frame-options'])
